@@ -33,13 +33,13 @@ class Telefone(models.Model):
 
 
 class Cliente(models.Model):
-    nome = models.CharField(max_length=100)
+    nome = models.CharField(max_length=100, blank=False, null=False)
     sexo = models.CharField(max_length=1, choices=SEXO_OPCOES)
     nascimento = models.DateTimeField()
     cpf = models.CharField(max_length=14, unique=True)
     endereco = models.OneToOneField(Endereco, on_delete=models.CASCADE)
     data_cadastro = models.DateTimeField(auto_now_add=True)
-    telefone = models.ManyToManyField(Telefone)
+    telefones = models.ManyToManyField(Telefone)
     email = models.EmailField()
 
     class Meta:
@@ -50,7 +50,7 @@ class Cliente(models.Model):
 class Fornecedor(models.Model):
     nome = models.CharField(max_length=100)
     cnpj = models.CharField(max_length=18, unique=True)
-    telefone = models.ManyToManyField(Telefone)
+    telefones = models.ManyToManyField(Telefone)
     email = models.EmailField()
     data_cadastro = models.DateTimeField(auto_now_add=True)
     endereco = models.OneToOneField(Endereco, on_delete=models.CASCADE)
@@ -98,9 +98,10 @@ class Escolaridade(models.Model):
 class Funcionario(models.Model):
     nome = models.CharField(max_length=100)
     sexo = models.CharField(max_length=1, choices=SEXO_OPCOES)
+    nascimento = models.DateTimeField()
     cpf = models.CharField(max_length=14, unique=True)
     endereco = models.OneToOneField(Endereco, on_delete=models.CASCADE)
-    telefone = models.ManyToManyField(Telefone)
+    telefones = models.ManyToManyField(Telefone)
     data_cadastro = models.DateTimeField(auto_now_add=True)
     email = models.EmailField()
     cargo = models.ForeignKey(Cargo, on_delete=models.CASCADE)
