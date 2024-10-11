@@ -2,6 +2,7 @@ import json
 
 from django.contrib import messages
 from django.contrib.auth import logout
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView
 from django.forms import inlineformset_factory
 from django.http import JsonResponse
@@ -14,7 +15,7 @@ from servicos.forms import ClienteForm, EnderecoForm, telefone_formset, Telefone
 from servicos.models import Cliente, Telefone, TelefoneCliente, Produto, OrdemServico, ItemOrdemServico, Funcionario
 
 
-class CadastroClienteView(CreateView):
+class CadastroClienteView(LoginRequiredMixin, CreateView):
     model = Cliente
     template_name = 'cliente/cadastrarCliente.html'
     form_class = ClienteForm
@@ -53,14 +54,14 @@ class CadastroClienteView(CreateView):
         return super().form_invalid(form)
 
 
-class ListarClienteView(ListView):
+class ListarClienteView(LoginRequiredMixin, ListView):
     model = Cliente
     template_name = "cliente/listar_clientes.html"
     context_object_name = "clientes"
     queryset = Cliente.objects.all()
 
 
-class EditarClienteView(UpdateView):
+class EditarClienteView(LoginRequiredMixin, UpdateView):
     model = Cliente
     template_name = 'cliente/editar_cliente.html'
     form_class = ClienteForm
@@ -96,7 +97,7 @@ class EditarClienteView(UpdateView):
         return super().form_invalid(form)
 
 
-class ExcluirClienteView(DeleteView):
+class ExcluirClienteView(LoginRequiredMixin, DeleteView):
     model = Cliente
     template_name = 'cliente/excluir_cliente.html'
     success_url = reverse_lazy('listar_clientes')
@@ -121,7 +122,7 @@ class DeslogarFuncionarioView(View):
         return redirect(self.success_url)
 
 
-class CadastrarProduto(CreateView):
+class CadastrarProduto(LoginRequiredMixin, CreateView):
     model = Produto
     template_name = 'produtos/criar.html'
     form_class = ProdutoForm
@@ -133,7 +134,7 @@ class CadastrarProduto(CreateView):
         return ctx
 
 
-class EditarProduto(UpdateView):
+class EditarProduto(LoginRequiredMixin, UpdateView):
     model = Produto
     template_name = 'produtos/editar.html'
     form_class = ProdutoForm
@@ -145,14 +146,14 @@ class EditarProduto(UpdateView):
         return ctx
 
 
-class ListarProdutoView(ListView):
+class ListarProdutoView(LoginRequiredMixin, ListView):
     model = Produto
     template_name = "produtos/listar.html"
     context_object_name = "produtos"
     queryset = Produto.objects.all()
 
 
-class CadastrarMarca(CreateView):
+class CadastrarMarca(LoginRequiredMixin, CreateView):
     def post(self, request, *args, **kwargs):
         form = MarcaForm(request.POST)
         if form.is_valid():
@@ -166,13 +167,13 @@ class CadastrarMarca(CreateView):
         return JsonResponse({'success': False, 'message': 'Método não permitido.'})
 
 
-class ExcluirProduto(DeleteView):
+class ExcluirProduto(LoginRequiredMixin, DeleteView):
     model = Produto
     template_name = 'produtos/excluir.html'
     success_url = reverse_lazy('listar_produtos')
 
 
-class CadastrarOrdem(CreateView):
+class CadastrarOrdem(LoginRequiredMixin, CreateView):
     model = OrdemServico
     template_name = "ordens_servico/criar.html"
     fields = ['cliente', 'descricao', ]
@@ -226,7 +227,7 @@ class CadastrarOrdem(CreateView):
         return self.form_invalid(form)
 
 
-class EditarOrdem(UpdateView):
+class EditarOrdem(LoginRequiredMixin, UpdateView):
     model = OrdemServico
     template_name = "ordens_servico/editar.html"
     fields = ['cliente', 'descricao', ]
@@ -283,14 +284,14 @@ class EditarOrdem(UpdateView):
         return super().form_invalid(form)
 
 
-class ListarOrdens(ListView):
+class ListarOrdens(LoginRequiredMixin, ListView):
     model = OrdemServico
     template_name = "ordens_servico/listar.html"
     context_object_name = "ordens"
     queryset = OrdemServico.objects.all()
 
 
-class ExcluirOrdem(DeleteView):
+class ExcluirOrdem(LoginRequiredMixin, DeleteView):
     model = OrdemServico
     template_name = 'ordens_servico/excluir.html'
     success_url = reverse_lazy('listar_ordens')
