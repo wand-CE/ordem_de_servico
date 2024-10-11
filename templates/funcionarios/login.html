@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load bootstrap5 %}
+
+{% block conteudo %}
+    <div class="d-flex justify-content-center mt-5 mb-5">
+        <div class="custom-bg p-4 shadow-lg rounded" style="width: 100%; max-width: 800px;">
+            <h2 class="text-center mb-4">Login Funcionário</h2>
+
+            {% if form.errors %}
+                <div style="color: red;">
+                    {% for field in form %}
+                        {% for error in field.errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    {% endfor %}
+                    {% for error in form.non_field_errors %}
+                        <p>{{ error }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            <form method="post">
+                {% csrf_token %}
+                {% bootstrap_form form %}
+                <button type="submit" class="btn btn-primary mt-5 w-100">Entrar</button>
+            </form>
+        </div>
+    </div>
+{% endblock %}
+{% block scripts %}
+    <script type="text/javascript">
+        $(function () {
+            $('.telefoneForm').formset({
+                prefix: '{{ telefone_formset.prefix }}',
+                addText: 'Adicionar Telefone',
+                deleteText: 'Remover Telefone',
+            })
+        })
+    </script>
+{% endblock scripts %}
+

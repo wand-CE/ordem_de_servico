@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load bootstrap5 %}
+
+{% block conteudo %}
+    <div class="d-flex justify-content-center mt-5 mb-5">
+        <div class="custom-bg p-4 shadow-lg rounded" style="width: 100%; max-width: 800px;">
+            <h2 class="text-center mb-4">Editar Cliente</h2>
+            <form method="post" novalidate>
+                {% csrf_token %}
+                {% bootstrap_form form %}
+                <h3>Endereço</h3>
+                {% bootstrap_form endereco_form %}
+
+                <h3>Telefones</h3>
+                {{ telefone_formset.management_form }}
+                <div>
+                    {% for field in telefone_formset %}
+                        <div class="telefoneForm d-flex mb-3">
+                            {{ field }}
+                        </div>
+                    {% endfor %}
+                </div>
+                <button type="submit" class="btn btn-primary mt-5 w-100">Atualizar</button>
+            </form>
+        </div>
+    </div>
+{% endblock %}
+{% block scripts %}
+    <script type="text/javascript">
+        $(function () {
+            $('.telefoneForm').formset({
+                prefix: '{{ telefone_formset.prefix }}',
+                addText: 'Adicionar Telefone',
+                deleteText: 'Remover Telefone',
+            })
+        })
+    </script>
+{% endblock scripts %}
+

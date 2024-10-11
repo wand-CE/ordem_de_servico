@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load bootstrap5 %}
+
+{% block conteudo %}
+    <div class="d-flex justify-content-center mt-5 mb-5">
+        <div class="custom-bg p-4 shadow-lg rounded" style="width: 100%; max-width: 800px;">
+            <h2 class="text-center mb-4">Cadastro de Produto</h2>
+            <form method="post" novalidate>
+                {% csrf_token %}
+                {% bootstrap_form form %}
+                <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#marcaModal">
+                    Cadastrar Marca
+                </button>
+                <button type="submit" class="btn btn-primary mt-5 w-100">Cadastrar</button>
+            </form>
+        </div>
+        <div class="modal fade" id="marcaModal" tabindex="-1" role="dialog" aria-labelledby="marcaModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="marcaModalLabel">Criar Nova Marca</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <form id="marcaForm">
+                        {% csrf_token %}
+                        <div class="modal-body">
+                            {% bootstrap_form marca_form %}
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary closeModal" data-dismiss="modal">Fechar
+                            </button>
+                            <button type="button" class="btn btn-primary" id="saveMarcaButton">Salvar Marca</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block scripts %}
+    <script>
+        document.getElementById('saveMarcaButton').addEventListener('click', function () {
+            const formData = new FormData(document.getElementById('marcaForm'));
+            const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+            fetch("{% url 'cadastrar_marca' %}", {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRFToken': csrfToken  // Adiciona o token CSRF no header
+                }
+            })
+                .then(response => response.json())
+                .then(data => {
+                    let element = document.createElement("option");
+                    if (data.success) {
+                        document.querySelector('.closeModal').click();
+                        document.getElementById('marcaForm').reset();
+                        element.value = data['id'];
+                        element.textContent = data['nome'];
+
+                        let marca_input = document.querySelector("#id_marca");
+                        marca_input.appendChild(element);
+                        marca_input.value = data['id'];
+                    } else {
+                        alert("Não foi possível adicionar marca");
+                    }
+
+                })
+                .catch(error => {
+                    alert("Não foi possível adicionar marca");
+                });
+        });
+    </script>
+{% endblock %}

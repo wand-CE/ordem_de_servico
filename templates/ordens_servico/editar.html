@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load bootstrap5 %}
+
+{% block conteudo %}
+    <div class="d-flex justify-content-center mt-5 mb-5">
+        <div class="custom-bg p-4 shadow-lg rounded" style="width: 100%; max-width: 800px;">
+            <h2 class="text-center mb-4">Editar Ordem de Serviço</h2>
+            <form method="post" novalidate>
+                {% csrf_token %}
+                {% bootstrap_form form %}
+
+                <br>
+                <hr>
+                <h3>Produtos</h3>
+                {{ item_formset.management_form }}
+                <div>
+                    {% for field in item_formset %}
+                        <div class="itemForm d-flex mb-3">
+                            {{ field }}
+                        </div>
+                    {% endfor %}
+                </div>
+                <button type="submit" class="btn btn-primary mt-5 w-100">Cadastrar</button>
+            </form>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script type="text/javascript">
+        $(function () {
+            $('.itemForm').formset({
+                prefix: '{{ item_formset.prefix }}',
+                addText: 'Adicionar Item',
+                deleteText: 'Remover Item',
+            })
+        })
+    </script>
+{% endblock scripts %}
