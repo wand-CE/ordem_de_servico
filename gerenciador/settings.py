@@ -43,7 +43,8 @@ INSTALLED_APPS = [
 
     'bootstrap5',
 
-    'gerenciador_base_app',
+    'base_app',
+    
     'clientes',
     'empresas',
     'financeiro',

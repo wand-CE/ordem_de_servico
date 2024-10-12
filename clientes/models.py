@@ -1,5 +1,5 @@
 from django.db import models
-from gerenciador_base_app.models import Endereco, Telefone, SEXO_OPCOES
+from base_app.models import Endereco, Telefone, SEXO_OPCOES
 
 
 class Cliente(models.Model):

@@ -5,7 +5,7 @@ from django.views.generic import CreateView, ListView, UpdateView, DeleteView
 
 from clientes.forms import ClienteForm, telefone_cliente_formset
 from clientes.models import Cliente, TelefoneCliente
-from gerenciador_base_app.forms import EnderecoForm, TelefoneForm
+from base_app.forms import EnderecoForm, TelefoneForm
 
 
 class ListarClienteView(LoginRequiredMixin, ListView):
