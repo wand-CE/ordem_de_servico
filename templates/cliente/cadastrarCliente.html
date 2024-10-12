@@ -13,9 +13,9 @@
                 {% bootstrap_form endereco_form %}
 
                 <h3>Telefones</h3>
-                {{ telefone_formset.management_form }}
+                {{ telefone_cliente_formset.management_form }}
                 <div>
-                    {% for field in telefone_formset %}
+                    {% for field in telefone_cliente_formset %}
                         <div class="telefoneForm d-flex mb-3">
                             {{ field }}
                         </div>
@@ -26,11 +26,11 @@
         </div>
     </div>
 {% endblock %}
-{% block scripts %}   
+{% block scripts %}
     <script type="text/javascript">
         $(function () {
             $('.telefoneForm').formset({
-                prefix: '{{ telefone_formset.prefix }}',
+                prefix: '{{ telefone_cliente_formset.prefix }}',
                 addText: 'Adicionar Telefone',
                 deleteText: 'Remover Telefone',
             })
